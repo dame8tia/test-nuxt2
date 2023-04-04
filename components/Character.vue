@@ -1,10 +1,14 @@
 <template>
-    <div class="person">  <!-- :style="backgroundUrl" -->
-        <NuxtLink :to="'people/' + this.id">Voir</NuxtLink>
-        <!-- <Btn :url="'people/' + persoObj.key" text= "Voir"/>  -->  
-        <p></p>         
-        <h5>{{ persoObj.name}}</h5>
-    </div>
+    <main>
+        <div class="text-center">
+            <NuxtLink :to="'people/' + this.id">
+                <h5>{{ persoObj.name}}</h5>
+            </NuxtLink>
+        </div>
+        <div class="person" :style="{ backgroundImage: `url(${persoObj.image})` }">  <!-- :style="backgroundUrl" -->
+        </div>
+    </main>
+    
 </template>
 
 <script>
@@ -41,7 +45,8 @@ export default {
 
 /*     computed:{        
         backgroundUrl() {
-        return  require('~/assets/images/characters/' + this.name.replace(' ','-') + '.jpg');
+            return this.persoObj.image;
+        /* return  require('~/assets/images/characters/' + this.name.replace(' ','-') + '.jpg');
     }
     },  */
 
@@ -51,16 +56,19 @@ export default {
 <style scoped>
     .person{
         text-align: center;
-        max-width:200px;
-        min-width:200px;
-        max-height:200px;
-        min-height:200px;
+        max-width:180px;
+        min-width:180px;
+        max-height:180px;
+        min-height:180px;
         border-radius: 100%;
         border: solid 2px yellow;
         background-position: center;
+        background-size:  cover;
     }
 
-    h4{
-        color:white;
+    h5{
+        color:rgb(255, 255, 255);
     }
+
+    
 </style>

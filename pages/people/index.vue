@@ -4,7 +4,7 @@
     <h1>Listing des personnages</h1>
     <div class="container px-4 text-center">
         <div class="row d-flex justify-content-center align-items-center">
-            <Character class="col-3 m-3" v-for="(perso, index) in personnages.results" :key="index" :persoObj="perso" :id="index+1" /> <!-- :name=name -->
+            <Character class="col-3 m-3" v-for="(perso, index) in personnages" :key="index" :persoObj="perso" :id="index+1" /> <!-- :name=name -->
             <!-- <Character class="col-3 m-3" v-for="(perso, index) in personnages.results" :index= "index" :name= "perso.name"  /> -->
         </div>
             <!-- {{ personnages.results}}  -->
@@ -28,7 +28,7 @@
                 /* { "name": "John", "lastname": "Doe"  },*/               
             }
         },
-        async fetch() {
+        async created() {
 /*             let url = "https://swapi.dev/api/people/";
 
             while(url){// On boucle ensuite sur l'url
@@ -37,11 +37,16 @@
                 this.personnages = this.personnages.concat(response.results);
             } */
 
-            this.personnages = await fetch(
+            const result = await fetch(
                 'https://swapi.dev/api/people/'
-            ).then(res => res.json());
+            ).then(res => res.json())
 
-            //console.log(this.personnages);
+            this.personnages = result.results.map((indiv) => ({
+                ...indiv,
+                image: `https://starwars-visualguide.com/assets/img/characters/${parseInt(indiv.url.replace(/\D/g, ''))}.jpg`
+            }))
+
+            /* console.log(this.personnages); */
     }
 }
 </script>

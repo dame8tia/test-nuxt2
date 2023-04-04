@@ -1,9 +1,8 @@
 <template>
     <main>
-        <h1 class="" >{{ perso }}</h1>
-        <!-- <h1 class="" >{{ perso.results[slug].name }}</h1> -->
+        <h1 class="text-center" >{{ perso.name }}</h1>
         <div class="title text-center text-center">            
-            <img class="image shadow-lg shadow-color mb-5 bc-yellow rounded" src="@/assets/images/nasa-accueil.jpg" alt="">
+            <img class="image shadow-lg shadow-color mb-5 bc-yellow rounded" :src="perso.image" alt="">
         </div>
 
         <h2 class="title text-warning text-center">Carte d'identité</h2>
@@ -12,9 +11,11 @@
             <div class="col-auto cartIdCol border border-warning me-3">
                 <p>Nom :                    <span>{{ perso.name }}</span>               </p>
                 <p>Année de naissance :     <span>{{ perso.birth_year }}</span>         </p>
-                <p>Planète de naissance :   <a :href="perso.homeworld">{{ perso.homeworld }}</a></p>
+                <p>Planète de naissance :   <a :href="perso.homeworld"> {{ planet }}</a></p>
                 <p>Genre :                  <span>{{ perso.genre }}</span>              </p>
-                <p>Espèce :                 <span v-for="i in perso.species.length" :esp="perso.species[i]">{{ perso.species.length}}</span>            </p>
+                <p>Espèce :                 <span >{{ perso.species}}</span>            </p> 
+                
+                <!-- v-for="i in perso.species.length" :esp="perso.species[i]" -->
                 
             </div>
             <div class="col-auto cartIdCol border border-warning ms-3">
@@ -28,57 +29,76 @@
         </div>
 
         <h2 class="title text-warning text-center">Filmographie</h2>
+        <!-- <div> {{ perso.films }} </div> -->
+        <!-- <CharacterFilm :numFilm="1"/> -->
+        <!-- <CharacterFilm v-for="film in perso.films" :film="film"/> -->
+        
+        <!-- <div v-for="film in perso.films" :title="film.title">{{ title }}</div> -->
         <div class="row d-flex justify-content-center align-items-center mx-5 mt-5">   
-            <img v-for="episode in apparition"
+<!--             <img v-for="episode in apparition"
                 class="col-auto" 
                 :src="require(`~/assets/images/movies/${episode.name}.jpg`)" 
                 :alt="`${episode.name}`"
                 width="150px"
                 height="200px"
-            >
+            > -->
         </div>
     </main>
 </template>
 
 <script>
     export default {
-        props:{
-            id:{
-                type: Number,
-            },
-            _slug:{
-                type: Number,
-            }
-        },
         data(){
             return {
-            "apparition": [
-                    {
-                        "name": "episode01", 
-                    },
-                    {
-                        "name": "episode02", 
-                    },
-                    {
-                        "name": "episode03", 
-                    },
-                    {
-                        "name": "episode06", 
-                    }
-                ],
-            "perso": [], 
+            /* "apparition": [], */
+            /* perso: [],  */
+            planet: ""
+            }
+        },
+/*         async asyncData({ params }) {
+            const slug = params.slug // When calling /abc the slug will be "abc"
+            return { slug }
+        }, */
+
+        /* async fetch() {
+            let url= 'https://swapi.dev/api/people/' + this.$route.params.slug;
+            this.perso = await fetch(url).then(res => res.json()); // perso à définir dans data()
+        }, */
+
+        async asyncData({ params }) {
+            //const slug = params.slug.replace(/-/g, ' ');
+            /* console.log("SLUG : " + params.slug) */
+            const slug = params.slug; 
+
+            let perso = await fetch(`https://swapi.dev/api/people/${slug}`).then(res => res.json());
+            
+            const imageId = parseInt(perso.url.match(/(\d+)\/$/)[1]);
+            const image = `https://starwars-visualguide.com/assets/img/characters/${imageId}.jpg`;
+            perso.image = image;
+
+            return { perso };
+        },
+
+/*         async asyncData({ params, $http }) {
+            const post = await $http.$get(`https://api.nuxtjs.dev/posts/${params.id}`)
+            return { post }
+        }, */
+
+        created() {
+            if (this.perso && this.perso.homeworld) {                
+                fetch(this.perso.homeworld)
+                    .then(response => response.json())
+                    .then(data => {
+                    const nomPlanete = data.name;
+                    console.log("Nom :" + nomPlanete);
+                    this.planet = nomPlanete;
+                    })
+                    .catch(error => {
+                    console.error('Erreur lors de la récupération des informations sur la planète.', error);
+                    });
             }
         },
 
-        async asyncData({ params }) {
-            const slug = params.slug // When calling /abc the slug will be "abc"
-            return { slug }
-        },
-
-        async fetch() {
-            let url= 'https://swapi.dev/api/people/' + this.$route.params.slug;
-            this.perso = await fetch(url).then(res => res.json());
-        },
         mounted(){ 
             console.log(this.$route.params.slug)
         }
@@ -89,7 +109,7 @@
 <style scoped>
     main {
         min-height:100%;
-        background-color: rgb(0, 0, 0);
+        /* background-color: rgb(0, 0, 0); */
         color: rgb(243, 172, 7);
     }
 
