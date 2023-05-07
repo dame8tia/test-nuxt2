@@ -1,20 +1,20 @@
 <template>
 
-<main>
-    <h1>Listing des personnages</h1>
-    <div class="container px-4 text-center">
-        <div class="row d-flex justify-content-center align-items-center">
-            <Character class="col-3 m-3" v-for="(perso, index) in personnages" :key="index" :persoObj="perso" :id="index+1" /> <!-- :name=name -->
-            <!-- <Character class="col-3 m-3" v-for="(perso, index) in personnages.results" :index= "index" :name= "perso.name"  /> -->
+    <main>
+        <h1>Listing des personnages</h1>
+        <div class="container px-4 text-center">
+            <div class="row d-flex justify-content-center align-items-center">
+                <Character class="col-3 m-3" v-for="(perso, index) in personnages" :key="index" :persoObj="perso" :id="index+1" /> <!-- :name=name -->
+                <!-- <Character class="col-3 m-3" v-for="(perso, index) in personnages.results" :index= "index" :name= "perso.name"  /> -->
+            </div>
+                <!-- {{ personnages.results}}  -->
+                <!-- {{ personnages.results[0].name }} -->
+                <!-- <pre>
+                {{ personnages.results[0].name }}    
+                url="name: people-slug, params:{ slug:index }" 
+                /pre> -->
         </div>
-            <!-- {{ personnages.results}}  -->
-            <!-- {{ personnages.results[0].name }} -->
-            <!-- <pre>
-            {{ personnages.results[0].name }}    
-            url="name: people-slug, params:{ slug:index }" 
-            /pre> -->
-    </div>
-</main>
+    </main>
 
 </template>
 
